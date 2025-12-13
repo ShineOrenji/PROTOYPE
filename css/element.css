@@ -1,0 +1,136 @@
+/* Floating Background Elements */
+
+.floating-elements {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.floating-element {
+    position: absolute;
+    color: rgba(0, 0, 0, 0.07); /* Ubah jadi abu-abu transparan */
+    font-size: 2.5rem;
+    animation: floatAround 15s infinite ease-in-out;
+    z-index: 1;
+}
+
+.floating-element.iron {
+    color: rgba(0, 0, 0, 0.1);
+    font-size: 3rem;
+}
+
+.floating-element.washing-machine {
+    color: rgba(0, 0, 0, 0.08);
+    font-size: 2.8rem;
+}
+
+.floating-element.spray {
+    color: rgba(0, 0, 0, 0.06);
+    font-size: 2.2rem;
+}
+
+.floating-element.hanger {
+    color: rgba(0, 0, 0, 0.09);
+    font-size: 2.4rem;
+}
+
+.floating-element.detergent {
+    color: rgba(0, 0, 0, 0.07);
+    font-size: 2.6rem;
+}
+
+.floating-element.basket {
+    color: rgba(0, 0, 0, 0.1);
+    font-size: 2.7rem;
+}
+
+@keyframes floatAround {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate(20px, -15px) rotate(5deg);
+    }
+    50% {
+        transform: translate(-15px, 10px) rotate(-5deg);
+    }
+    75% {
+        transform: translate(10px, 20px) rotate(3deg);
+    }
+}
+
+/* Untuk hero section yang background orange, gunakan warna putih transparan */
+
+.hero .floating-element {
+    color: rgba(255, 255, 255, 0.15);
+}
+
+.hero .floating-element.iron {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.hero .floating-element.washing-machine {
+    color: rgba(255, 255, 255, 0.15);
+}
+
+.hero .floating-element.spray {
+    color: rgba(255, 255, 255, 0.1);
+}
+
+.hero .floating-element.hanger {
+    color: rgba(255, 255, 255, 0.18);
+}
+
+.hero .floating-element.detergent {
+    color: rgba(255, 255, 255, 0.12);
+}
+
+.hero .floating-element.basket {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* Tambahkan z-index pada konten agar di atas elemen melayang */
+
+.hero-container,
+.about-content,
+.container,
+.contact-content {
+    position: relative;
+    z-index: 30;
+}
+
+/* Update background section agar transparan */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.about {
+    background: var(--light-bg);
+    position: relative;
+    overflow: hidden;
+}
+
+.menu {
+    background: var(--light);
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonials {
+    background: var(--light-bg);
+    position: relative;
+    overflow: hidden;
+}
+
+.contact {
+    background: var(--light);
+    position: relative;
+    overflow: hidden;
+}

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Mojang Laundry</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin-style.css">
+    <link rel="icon" href="img/logo.png" type="image/x-icon">
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <h2><i class="fas fa-tshirt"></i><span> Mojang Laundry</span></h2>
+            <p>Admin Panel</p>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="#" class="active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" data-page="orders">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Pesanan</span>
+            </a>
+            <a href="#" data-page="customers">
+                <i class="fas fa-users"></i>
+                <span>Pelanggan</span>
+            </a>
+            <a href="#" data-page="services">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Layanan</span>
+            </a>
+            <a href="#" data-page="settings">
+                <i class="fas fa-cog"></i>
+                <span>Pengaturan</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="admin-profile">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Admin">
+                <div>
+                    <h4>Admin</h4>
+                    <p>Status: Online</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Cari...">
+            </div>
+            
+            <div class="top-bar-right">
+                <div class="date-time">
+                    <span id="currentDate"></span>
+                    <span id="currentTime"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD CONTENT -->
+        <div class="content-area">
+            <!-- Page: Dashboard -->
+            <div class="page active" id="dashboard-page">
+                <div class="page-header">
+                    <h1>Dashboard Utama</h1>
+                    <p>Selamat datang di panel admin Mojang Laundry</p>
+                </div>
+                
+                <!-- STATS CARDS -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #4CAF50;">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>-</h3>
+                            <p>Cucian Diproses</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #2196F3;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>-</h3>
+                            <p>Pelanggan</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #FF9800;">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>-</h3>
+                            <p>Rating</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #9C27B0;">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>-</h3>
+                            <p>Waktu Rata-rata</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- MAIN CONTENT GRID -->
+                <div class="content-grid">
+                    <!-- Activity Overview -->
+                    <div class="card full-width">
+                        <div class="card-header">
+                            <h3>Status Laundry</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="activity-stats">
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="activity-info">
+                                        <h4>Menunggu Cuci</h4>
+                                        <p>- paket</p>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-washing-machine"></i>
+                                    </div>
+                                    <div class="activity-info">
+                                        <h4>Sedang Dicuci</h4>
+                                        <p>- paket</p>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-temperature-high"></i>
+                                    </div>
+                                    <div class="activity-info">
+                                        <h4>Sedang Disetrika</h4>
+                                        <p>- paket</p>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="activity-info">
+                                        <h4>Siap Diambil</h4>
+                                        <p>- paket</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Aktivitas</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-icon info">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h4>Dashboard Siap</h4>
+                                        <p>Panel admin sudah terhubung</p>
+                                        <span class="timeline-time">Sekarang</span>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-icon info">
+                                        <i class="fas fa-database"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h4>Database</h4>
+                                        <p>Siap dihubungkan</p>
+                                        <span class="timeline-time">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page: Orders -->
+            <div class="page" id="orders-page">
+                <div class="page-header">
+                    <h1>Pesanan</h1>
+                    <p>Halaman manajemen pesanan</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Daftar Pesanan</h3>
+                        <div class="info-badge">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Siap dihubungkan ke database</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="placeholder-info">
+                            <i class="fas fa-shopping-cart fa-3x"></i>
+                            <h4>Tabel Pesanan</h4>
+                            <p>Data akan muncul setelah terhubung ke database</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page: Customers -->
+            <div class="page" id="customers-page">
+                <div class="page-header">
+                    <h1>Pelanggan</h1>
+                    <p>Halaman manajemen pelanggan</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Daftar Pelanggan</h3>
+                        <div class="info-badge">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Siap dihubungkan ke database</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="placeholder-info">
+                            <i class="fas fa-users fa-3x"></i>
+                            <h4>Tabel Pelanggan</h4>
+                            <p>Data akan muncul setelah terhubung ke database</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page: Services -->
+            <div class="page" id="services-page">
+                <div class="page-header">
+                    <h1>Layanan</h1>
+                    <p>Halaman manajemen layanan</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Daftar Layanan</h3>
+                        <div class="info-badge">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Siap dihubungkan ke database</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="placeholder-info">
+                            <i class="fas fa-concierge-bell fa-3x"></i>
+                            <h4>Tabel Layanan</h4>
+                            <p>Data akan muncul setelah terhubung ke database</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page: Settings -->
+            <div class="page" id="settings-page">
+                <div class="page-header">
+                    <h1>Pengaturan</h1>
+                    <p>Konfigurasi sistem</p>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Konfigurasi</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <i class="fas fa-database"></i>
+                                <div class="setting-info">
+                                    <h4>Koneksi Database</h4>
+                                    <p>Status: Belum terhubung</p>
+                                </div>
+                                <div class="setting-status">
+                                    <span class="status-dot offline"></span>
+                                    Offline
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <i class="fas fa-server"></i>
+                                <div class="setting-info">
+                                    <h4>Server</h4>
+                                    <p>Siap untuk koneksi</p>
+                                </div>
+                                <div class="setting-status">
+                                    <span class="status-dot ready"></span>
+                                    Siap
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin-script.js"></script>
+</body>
+</html>
