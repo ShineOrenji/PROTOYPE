@@ -123,12 +123,6 @@
     overflow: hidden;
 }
 
-.testimonials {
-    background: var(--light-bg);
-    position: relative;
-    overflow: hidden;
-}
-
 .contact {
     background: var(--light);
     position: relative;

@@ -48,6 +48,13 @@ class HoverEffectsManager {
         }
 
         button.appendChild(circle);
+        
+        // Remove ripple after animation
+        setTimeout(() => {
+            if (circle.parentNode === button) {
+                circle.remove();
+            }
+        }, 600);
     }
 
     tiltCard(card, degree) {
@@ -94,24 +101,6 @@ class CounterAnimation {
     }
 }
 
-// Testimonials Carousel tanpa pause
-class TestimonialsCarousel {
-    constructor() {
-        this.track = document.getElementById('testimonialsTrack');
-        this.init();
-    }
-
-    init() {
-        this.duplicateTestimonials();
-        this.track.style.animationPlayState = 'running';
-    }
-
-    duplicateTestimonials() {
-        const testimonials = this.track.innerHTML;
-        this.track.innerHTML += testimonials;
-    }
-}
-
 // Smooth Scrolling
 class SmoothScroller {
     constructor() {
@@ -143,7 +132,6 @@ class App {
     constructor() {
         this.hoverEffects = new HoverEffectsManager();
         this.counterAnimation = new CounterAnimation();
-        this.testimonialsCarousel = new TestimonialsCarousel();
         this.smoothScroller = new SmoothScroller();
         this.init();
     }
@@ -154,7 +142,9 @@ class App {
         this.setupForms();
         this.setupBackToTop();
         this.setupScrollAnimations();
-        console.log('App initialized successfully');
+        this.setupAddToCart();
+        this.updateCartCountOnLoad(); // Update cart count saat pertama kali load
+        console.log('App initialized successfully');    
     }
 
     setupNavbar() {
@@ -275,12 +265,252 @@ class App {
             observer.observe(el);
         });
     }
-    
+
+    setupAddToCart() {
+        document.querySelectorAll('.btn-add-cart').forEach(button => {
+            // Hapus event listener lama jika ada
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            
+            newButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const menuItem = newButton.closest('.menu-item');
+                if (!menuItem) return;
+                
+                const serviceName = menuItem.querySelector('h3').textContent;
+                const priceText = menuItem.querySelector('.item-price').textContent;
+                const serviceCategory = menuItem.getAttribute('data-category');
+                
+                // Extract price dari text
+                const servicePrice = this.extractPrice(priceText);
+                
+                // Add to cart
+                this.addToCart({
+                    id: Date.now(),
+                    name: serviceName,
+                    price: servicePrice,
+                    quantity: 1,
+                    category: serviceCategory
+                });
+                
+                // Update UI
+                this.updateCartCount();
+                this.showCartNotification(serviceName);
+                
+                // Add ripple effect
+                this.hoverEffects.createRipple(e);
+            });
+        });
+    }
+
+    extractPrice(priceText) {
+        // Hapus simbol mata uang, titik, dan karakter non-numerik
+        const cleanText = priceText
+            .replace('Rp', '')
+            .replace(/\./g, '')
+            .replace('/kg', '')
+            .replace('/pcs', '')
+            .replace('/bulan', '')
+            .replace(/\s+/g, '')
+            .trim();
+        
+        return parseInt(cleanText) || 0;
+    }
+
+    addToCart(item) {
+        let cart = JSON.parse(localStorage.getItem('mojangLaundryCart') || '[]');
+        
+        // Cek apakah item sudah ada (bandingkan berdasarkan nama dan kategori)
+        const existingIndex = cart.findIndex(cartItem => 
+            cartItem.name === item.name && cartItem.category === item.category
+        );
+        
+        if (existingIndex !== -1) {
+            // Update kuantitas jika sudah ada
+            cart[existingIndex].quantity += 1;
+        } else {
+            // Tambah item baru
+            cart.push(item);
+        }
+        
+        // Simpan ke localStorage
+        localStorage.setItem('mojangLaundryCart', JSON.stringify(cart));
+        
+        // Dispatch custom event untuk komponen lain
+        this.dispatchCartUpdateEvent(cart);
+    }
+
+    dispatchCartUpdateEvent(cart) {
+        const event = new CustomEvent('cartUpdated', { 
+            detail: { cart: cart } 
+        });
+        window.dispatchEvent(event);
+    }
+
+    updateCartCountOnLoad() {
+        // Update cart count saat pertama kali load
+        this.updateCartCount();
+        
+        // Listen untuk cart updates dari komponen lain
+        window.addEventListener('cartUpdated', () => {
+            this.updateCartCount();
+        });
+        
+        // Juga listen untuk storage changes (jika di tab lain)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'mojangLaundryCart') {
+                this.updateCartCount();
+            }
+        });
+    }
+
+    updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem('mojangLaundryCart') || '[]');
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        
+        // Update floating checkout button
+        const checkoutBtn = document.getElementById('floatingCheckoutBtn');
+        if (checkoutBtn) {
+            // Buat elemen baru
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-shopping-cart';
+            
+            const span = document.createElement('span');
+            if (totalItems > 0) {
+                span.textContent = totalItems;
+            } else {
+                span.textContent = 'Checkout';
+            }
+            
+            // Style span
+            span.style.cssText = `
+                font-size: 11px;
+                font-weight: 600;
+                margin-top: 2px;
+            `;
+            
+            // Clear dan rebuild button content
+            checkoutBtn.innerHTML = '';
+            checkoutBtn.appendChild(icon);
+            checkoutBtn.appendChild(span);
+        }
+    }
+
+    showCartNotification(serviceName) {
+        // Hapus notifikasi yang sudah ada jika ada
+        const existingNotification = document.querySelector('.cart-notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+        
+        // Buat notifikasi baru
+        const notification = document.createElement('div');
+        notification.className = 'cart-notification';
+        notification.innerHTML = `
+            <i class="fas fa-check-circle"></i>
+            <span>${serviceName} ditambahkan ke keranjang!</span>
+        `;
+        
+        // Tambah styles
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 9999;
+            animation: slideInRight 0.3s ease forwards;
+            font-size: 14px;
+            max-width: 350px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        `;
+        
+        // Tambah animation styles
+        if (!document.querySelector('#cart-notification-styles')) {
+            const style = document.createElement('style');
+            style.id = 'cart-notification-styles';
+            style.textContent = `
+                @keyframes slideInRight {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                @keyframes slideOutRight {
+                    from {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        document.body.appendChild(notification);
+        
+        // Auto hapus setelah 3 detik
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease forwards';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+        }, 3000);
+        
+        // Click to dismiss
+        notification.addEventListener('click', () => {
+            notification.style.animation = 'slideOutRight 0.3s ease forwards';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+        });
+    }
 }
 
 // Initialize the application when DOM is loaded
-
 document.addEventListener('DOMContentLoaded', () => {
-    new App();
+    const app = new App();
+    
+    // Setup checkout button event listener
+    const checkoutBtn = document.getElementById('floatingCheckoutBtn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', function() {
+            const cart = JSON.parse(localStorage.getItem('mojangLaundryCart') || '[]');
+            
+            if (cart.length > 0) {
+                // Redirect to checkout page
+                window.location.href = 'checkout/index.html';
+            } else {
+                // Scroll to contact section if cart is empty
+                const contactSection = document.getElementById('kontak');
+                if (contactSection) {
+                    contactSection.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    }
+    
     console.log("MOJANG LAUNDRY website loaded successfully!");
 });

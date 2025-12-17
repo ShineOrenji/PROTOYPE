@@ -228,6 +228,7 @@ section {
 .navbar-menu .login {
     background-color: var(--primary);
     border-radius: var(--border-radius);
+    border: 1px solid #1E60FF;
     padding: 5px 20px;
     transition: var(--transition);
 }
@@ -301,7 +302,7 @@ section {
 
 .hero-title span {
     display: block;
-    color: var(--secondary);
+    color: #39b0ff;
 }
 
 .hero-subtitle {
@@ -636,15 +637,13 @@ section {
     transform: translateY(-2px);
 }
 
-/* -+- TESTIMONI SECTION -+- */
+/* -+- KONTAK SECTION -+- */
 
-.testimonials {
-    background: var(--light-bg);
-    overflow: hidden;
-    position: relative;
+.contact {
+    background: var(--light);
 }
 
-.testimonials::before {
+.contact::before {
     content: '';
     position: absolute;
     top: 0;
@@ -655,99 +654,9 @@ section {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.70;
+    opacity: 0.30;
     z-index: 0;
-}
 
-.testimonials-wrapper {
-    position: relative;
-    overflow: hidden;
-    padding: 20px 0;
-}
-
-.testimonials-track {
-    display: flex;
-    gap: 20px;
-    animation: scrollTestimonials 40s linear infinite;
-    width: max-content;
-}
-
-.testimonial-card {
-    background: var(--light);
-    border-radius: var(--border-radius);
-    padding: 25px;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    min-width: 280px;
-    max-width: 320px;
-    flex-shrink: 0;
-}
-
-.testimonial-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-.testimonial-content {
-    margin-bottom: 20px;
-}
-
-.rating {
-    color: var(--primary);
-    margin-bottom: 15px;
-}
-
-.testimonial-content p {
-    font-style: italic;
-    color: var(--text-light);
-    font-size: 0.9rem;
-    line-height: 1.5;
-}
-
-.testimonial-author {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.author-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    overflow: hidden;
-}
-
-.author-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.author-info h4 {
-    margin-bottom: 5px;
-    color: var(--dark);
-    font-size: 1rem;
-}
-
-.author-info p {
-    font-size: 0.8rem;
-    color: var(--text-light);
-}
-
-@keyframes scrollTestimonials {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(calc(-280px * 5 - 20px * 4));
-    }
-}
-
-/* -+- KONTAK SECTION -+- */
-
-.contact {
-    background: var(--light);
 }
 
 .contact-content {
@@ -787,7 +696,7 @@ section {
 }
 
 .contact-text p {
-    color: var(--text-light);
+    color: var(--text);
 }
 
 .social-links {

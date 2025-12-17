@@ -1,0 +1,70 @@
+/* Ripple Effect */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.btn, .btn-add-cart, .category-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Floating Checkout Button Updates */
+.floating-checkout-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+    background: linear-gradient(135deg, #0190FF 0%, #0056b3 100%);
+    color: white;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(1, 144, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    visibility: hidden;
+}
+
+.floating-checkout-btn.show {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+.floating-checkout-btn:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #0190FF 100%);
+    transform: scale(1.1);
+    box-shadow: 0 12px 30px rgba(1, 144, 255, 0.6);
+}
+
+.floating-checkout-btn i {
+    font-size: 24px;
+    margin-bottom: 5px;
+    transition: transform 0.3s ease;
+}
+
+.floating-checkout-btn span {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Mojang Laundry</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="checkout.css">
+    <link rel="icon" href="../assets/logo.png" type="image/x-icon">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="../index.html" class="navbar-logo">
+                <i class="fa fa-spray-can-sparkles" style="margin-right: 6px;"></i>
+                <span>Mojang </span>Laundry
+            </a>
+    </nav>
+
+    <!-- CHECKOUT MAIN CONTENT -->
+    <main class="checkout-container">
+        <div class="container">
+            <div class="checkout-header">
+                <h1><i class="fas fa-shopping-cart"></i> Checkout Pesanan</h1>
+                <p class="checkout-subtitle">Lengkapi data diri dan pilih metode pembayaran untuk melanjutkan</p>
+            </div>
+
+            <div class="checkout-content">
+                <!-- LEFT SIDE: Order Details & Forms -->
+                <div class="checkout-left">
+                    <!-- Progress Steps -->
+                    <div class="checkout-steps">
+                        <div class="step active">
+                            <div class="step-number">1</div>
+                            <div class="step-info">
+                                <div class="step-title">Data Diri</div>
+                                <div class="step-desc">Isi informasi pribadi</div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-info">
+                                <div class="step-title">Pengiriman</div>
+                                <div class="step-desc">Pilih metode pengiriman</div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-info">
+                                <div class="step-title">Pembayaran</div>
+                                <div class="step-desc">Pilih metode pembayaran</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Diri Form -->
+                    <form id="checkoutForm" class="checkout-form">
+                        <!-- Data Diri Section -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-user"></i> Data Diri</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="nama">Nama Lengkap <span class="required">*</span></label>
+                                    <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="telepon">No. Telepon <span class="required">*</span></label>
+                                    <input type="tel" id="telepon" name="telepon" placeholder="0812-3456-7890" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email <span class="required">*</span></label>
+                                    <input type="email" id="email" name="email" placeholder="nama@email.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="alamat">Alamat Lengkap <span class="required">*</span></label>
+                                    <textarea id="alamat" name="alamat" rows="3" placeholder="Jl. Contoh No. 123, Kecamatan, Kota" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="catatan">Catatan Pesanan (Opsional)</label>
+                                    <textarea id="catatan" name="catatan" rows="2" placeholder="Contoh: Ada noda khusus di baju warna putih..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pengiriman Section -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-truck"></i> Metode Pengiriman</h3>
+                            <div class="delivery-options">
+                                <div class="delivery-option selected">
+                                    <input type="radio" name="delivery" value="pickup" checked>
+                                    <div class="option-content">
+                                        <div class="option-icon">
+                                            <i class="fas fa-store"></i>
+                                        </div>
+                                        <div class="option-info">
+                                            <h4>Ambil Sendiri</h4>
+                                            <p>Ambil di toko Mojang Laundry</p>
+                                            <span class="option-price">GRATIS</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="delivery-option">
+                                    <input type="radio" name="delivery" value="delivery">
+                                    <div class="option-content">
+                                        <div class="option-icon">
+                                            <i class="fas fa-motorcycle"></i>
+                                        </div>
+                                        <div class="option-info">
+                                            <h4>Antar Jemput</h4>
+                                            <p>Kurir kami akan menjemput dan mengantar</p>
+                                            <span class="option-price">Rp 10.000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tanggal Jemput -->
+                            <div class="form-group pickup-date">
+                                <label for="pickupDate">Tanggal Penjemputan</label>
+                                <input type="date" id="pickupDate" name="pickupDate">
+                            </div>
+                        </div>
+
+                        <!-- Pembayaran Section -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-credit-card"></i> Metode Pembayaran</h3>
+                            <div class="payment-options">
+                                <div class="payment-option selected">
+                                    <input type="radio" name="payment" value="cash" checked>
+                                    <div class="option-content">
+                                        <div class="option-icon">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </div>
+                                        <div class="option-info">
+                                            <h4>Bayar di Tempat</h4>
+                                            <p>Bayar saat penjemputan/pengantaran</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-option">
+                                    <input type="radio" name="payment" value="transfer">
+                                    <div class="option-content">
+                                        <div class="option-icon">
+                                            <i class="fas fa-university"></i>
+                                        </div>
+                                        <div class="option-info">
+                                            <h4>Transfer Bank</h4>
+                                            <p>BCA - 1234567890 (Mojang Laundry)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-option">
+                                    <input type="radio" name="payment" value="ewallet">
+                                    <div class="option-content">
+                                        <div class="option-icon">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                        <div class="option-info">
+                                            <h4>E-Wallet</h4>
+                                            <p>OVO, Dana, GoPay, ShopeePay</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="form-section terms">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="terms" required>
+                                <span class="checkmark"></span>
+                                <span>Saya setuju dengan <a href="#" class="terms-link">Syarat & Ketentuan</a> dan <a href="#" class="terms-link">Kebijakan Privasi</a> Mojang Laundry</span>
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="backToHome">
+                                <i class="fas fa-arrow-left"></i> Kembali
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="submitOrder">
+                                <i class="fas fa-paper-plane"></i> Pesan Sekarang
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- RIGHT SIDE: Order Summary -->
+                <div class="checkout-right">
+                    <div class="order-summary">
+                        <h3><i class="fas fa-receipt"></i> Ringkasan Pesanan</h3>
+                        
+                        <!-- Selected Services -->
+                        <div class="summary-items" id="summaryItems">
+                            <!-- Items will be dynamically added here -->
+                        </div>
+
+                        <!-- Order Calculations -->
+                        <div class="summary-calculations">
+                            <div class="calculation-row">
+                                <span>Subtotal</span>
+                                <span id="subtotal">Rp 0</span>
+                            </div>
+                            <div class="calculation-row">
+                                <span>Biaya Pengiriman</span>
+                                <span id="deliveryFee">Rp 0</span>
+                            </div>
+                            <div class="calculation-row total">
+                                <span>Total Pembayaran</span>
+                                <span id="totalAmount">Rp 0</span>
+                            </div>
+                        </div>
+
+                        <!-- Order Info -->
+                        <div class="order-info">
+                            <div class="info-item">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <h4>Estimasi Selesai</h4>
+                                    <p id="estimateTime">-</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <div>
+                                    <h4>Garansi Layanan</h4>
+                                    <p>100% Kepuasan Garansi</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Customer Support -->
+                        <div class="customer-support">
+                            <h4><i class="fas fa-headset"></i> Butuh Bantuan?</h4>
+                            <p>Hubungi Customer Service kami:</p>
+                            <a href="https://wa.me/6287776498864" class="support-link" target="_blank">
+                                <i class="fab fa-whatsapp"></i> (+62) 877-7649-8864
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="../index.html" class="navbar-logo">
+                        <span style="color: #fff;">Mojang</span> <span>Laundry</span>
+                    </a>
+                    <p>Layanan laundry profesional dengan standar kebersihan tinggi sejak 2015</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Bantuan</h4>
+                    <ul>
+                        <li><a href="#">Cara Pesan</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mojang Laundry. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="checkout-script.js"></script>
+    <script src="../js/script.js"></script>
+</body>
+</html>
