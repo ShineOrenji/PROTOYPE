@@ -540,8 +540,8 @@ function printReceipt(orderData, total) {
         <body>
             <div class="header">
                 <h1>Mojang Laundry</h1>
-                <p>Jl. Contoh No. 123, Purwakarta</p>
-                <p>Telp: (0264) 123456</p>
+                <p>Kp. Sindang RT.10 / RW.03 Desa. Cijantung Kec. Sukatani Kab.Purwakarta</p>
+                <p>Telp: (+62) 877-7649-8864</p>
             </div>
             
             <div class="details">

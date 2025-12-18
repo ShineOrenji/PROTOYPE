@@ -585,11 +585,6 @@ section {
 }
 
 .item-badge.popular {
-    background: var(--secondary);
-    color: var(--dark);
-}
-
-.item-badge.new {
     background: var(--primary);
     color: var(--light);
 }
