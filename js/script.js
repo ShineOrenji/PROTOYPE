@@ -143,7 +143,7 @@ class App {
         this.setupBackToTop();
         this.setupScrollAnimations();
         this.setupAddToCart();
-        this.updateCartCountOnLoad(); // Update cart count saat pertama kali load
+        this.updateCartCountOnLoad();
         console.log('App initialized successfully');    
     }
 
@@ -279,30 +279,166 @@ class App {
                 const menuItem = newButton.closest('.menu-item');
                 if (!menuItem) return;
                 
-                const serviceName = menuItem.querySelector('h3').textContent;
-                const priceText = menuItem.querySelector('.item-price').textContent;
-                const serviceCategory = menuItem.getAttribute('data-category');
+                const serviceName = newButton.getAttribute('data-service') || menuItem.querySelector('h3').textContent;
+                const priceOptions = newButton.getAttribute('data-price-options');
                 
-                // Extract price dari text
-                const servicePrice = this.extractPrice(priceText);
-                
-                // Add to cart
-                this.addToCart({
-                    id: Date.now(),
-                    name: serviceName,
-                    price: servicePrice,
-                    quantity: 1,
-                    category: serviceCategory
-                });
-                
-                // Update UI
-                this.updateCartCount();
-                this.showCartNotification(serviceName);
-                
-                // Add ripple effect
-                this.hoverEffects.createRipple(e);
+                // Jika ada price options, tampilkan modal pilihan ukuran
+                if (priceOptions) {
+                    this.showSizeSelectionModal(serviceName, priceOptions, newButton);
+                } else {
+                    // Untuk layanan tanpa pilihan ukuran (kg-based)
+                    const priceText = menuItem.querySelector('.item-price').textContent;
+                    const serviceCategory = menuItem.getAttribute('data-category');
+                    const servicePrice = this.extractPrice(priceText);
+                    
+                    this.addToCart({
+                        id: Date.now(),
+                        name: serviceName,
+                        price: servicePrice,
+                        quantity: 1,
+                        category: serviceCategory,
+                        unit: 'kg'
+                    });
+                    
+                    this.updateCartCount();
+                    this.showCartNotification(serviceName);
+                    this.hoverEffects.createRipple(e);
+                }
             });
         });
+    }
+
+    showSizeSelectionModal(serviceName, priceOptionsString, button) {
+    const priceOptions = JSON.parse(priceOptionsString);
+    const minPrice = priceOptions.min;
+    const maxPrice = priceOptions.max;
+    const basePrice = priceOptions.harga || minPrice;
+    
+    // Simpan reference ke app instance
+    const app = this;
+    
+    const modal = document.createElement('div');
+    modal.className = 'size-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3 class="modal-title">${serviceName}</h3>
+            
+            <div class="price-range-info">
+                <p><strong>Harga:</strong> Rp ${this.formatNumber(minPrice)} - Rp ${this.formatNumber(maxPrice)}</p>
+                <p class="note">*Harga final akan ditentukan saat penjemputan berdasarkan ukuran & kondisi</p>
+            </div>
+            
+            <div class="quantity-selector">
+                <button class="qty-btn minus" type="button">-</button>
+                <span class="qty-value">1</span>
+                <button class="qty-btn plus" type="button">+</button>
+                <span class="unit">${serviceName.includes('Jas') ? 'set' : 'biji'}</span>
+            </div>
+            
+            <div class="estimated-price">
+                <p>Estimasi harga: <strong>Rp ${this.formatNumber(basePrice)}</strong></p>
+                <small>(Harga per ${serviceName.includes('Jas') ? 'set' : 'biji'})</small>
+            </div>
+            
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="cancelSizeBtn">Batal</button>
+                <button type="button" class="btn btn-primary" id="confirmSizeBtn">Tambah ke Keranjang</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Show modal
+    setTimeout(() => modal.classList.add('active'), 10);
+    
+    // Quantity control
+    let quantity = 1;
+    
+    modal.querySelector('.qty-btn.minus').addEventListener('click', () => {
+        if (quantity > 1) {
+            quantity--;
+            modal.querySelector('.qty-value').textContent = quantity;
+            updateEstimatedPrice();
+        }
+    });
+    
+    modal.querySelector('.qty-btn.plus').addEventListener('click', () => {
+        quantity++;
+        modal.querySelector('.qty-value').textContent = quantity;
+        updateEstimatedPrice();
+    });
+    
+    // Function to update estimated price
+    function updateEstimatedPrice() {
+        const estimatedPrice = basePrice * quantity;
+        modal.querySelector('.estimated-price strong').textContent = `Rp ${app.formatNumber(estimatedPrice)}`;
+    }
+    
+    // CONFIRM BUTTON - FIXED
+    modal.querySelector('#confirmSizeBtn').addEventListener('click', function() {
+        const menuItem = button.closest('.menu-item');
+        const serviceCategory = menuItem.getAttribute('data-category');
+        const unit = serviceName.includes('Jas') ? 'set' : 'biji';
+        
+        app.addToCart({
+            id: Date.now(),
+            name: serviceName,
+            price: basePrice,
+            quantity: quantity,
+            category: serviceCategory,
+            unit: unit,
+            priceRange: `${minPrice}-${maxPrice}`,
+            note: `Harga final: Rp ${minPrice} - ${maxPrice} per ${unit}`
+        });
+        
+        app.updateCartCount();
+        app.showCartNotification(`${serviceName} (${quantity} ${unit})`);
+        
+        // Close modal
+        modal.classList.remove('active');
+        setTimeout(() => {
+            if (modal.parentNode) {
+                modal.remove();
+            }
+        }, 300);
+    });
+    
+    // CANCEL BUTTON - FIXED
+    modal.querySelector('#cancelSizeBtn').addEventListener('click', function() {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            if (modal.parentNode) {
+                modal.remove();
+            }
+        }, 300);
+    });
+    
+    // Close on overlay click
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                if (modal.parentNode) {
+                    modal.remove();
+                }
+            }, 300);
+        }
+    });
+}
+
+    getSizeName(sizeKey) {
+        const sizeNames = {
+            'single_double': 'Single/Double',
+            'queen_king': 'Queen/King',
+            'standar': 'Standar',
+            'premium': 'Premium'
+        };
+        return sizeNames[sizeKey] || sizeKey;
+    }
+
+    formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
     extractPrice(priceText) {
@@ -322,14 +458,16 @@ class App {
     addToCart(item) {
         let cart = JSON.parse(localStorage.getItem('mojangLaundryCart') || '[]');
         
-        // Cek apakah item sudah ada (bandingkan berdasarkan nama dan kategori)
+        // Cek apakah item sudah ada (bandingkan berdasarkan nama dan kategori dan size)
         const existingIndex = cart.findIndex(cartItem => 
-            cartItem.name === item.name && cartItem.category === item.category
+            cartItem.name === item.name && 
+            cartItem.category === item.category &&
+            cartItem.size === item.size
         );
         
         if (existingIndex !== -1) {
             // Update kuantitas jika sudah ada
-            cart[existingIndex].quantity += 1;
+            cart[existingIndex].quantity += item.quantity;
         } else {
             // Tambah item baru
             cart.push(item);

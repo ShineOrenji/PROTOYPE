@@ -37,7 +37,8 @@ function loadCartItems() {
                 name: service,
                 price: parseInt(price),
                 quantity: 1,
-                category: urlParams.get('category') || 'general'
+                category: urlParams.get('category') || 'general',
+                unit: urlParams.get('unit') || 'kg'
             }];
         }
     }
@@ -60,15 +61,25 @@ function displayCartItems(items) {
     summaryItems.innerHTML = '';
     
     items.forEach((item, index) => {
+        // Check if item has price range note
+        let noteDisplay = '';
+        if (item.note) {
+            noteDisplay = `<p class="item-note">${item.note}</p>`;
+        }
+        
+        // Get unit - PAKAI item.unit jika ada, default 'kg'
+        const unit = item.unit || 'kg';
+        
         const itemElement = document.createElement('div');
         itemElement.className = 'summary-item';
         itemElement.innerHTML = `
             <div class="item-name">
                 <h4>${item.name}</h4>
+                ${noteDisplay}
                 <p>${getCategoryName(item.category)}</p>
                 <div class="item-qty">
                     <button class="qty-btn minus" data-index="${index}">-</button>
-                    <span class="qty-value">${item.quantity} kg</span>
+                    <span class="qty-value">${item.quantity} ${unit}</span>
                     <button class="qty-btn plus" data-index="${index}">+</button>
                 </div>
             </div>
@@ -81,6 +92,16 @@ function displayCartItems(items) {
     document.querySelectorAll('.qty-btn').forEach(btn => {
         btn.addEventListener('click', handleQuantityChange);
     });
+}
+
+function getSizeDisplayName(sizeKey) {
+    const sizes = {
+        'single_double': 'Single/Double',
+        'queen_king': 'Queen/King',
+        'standar': 'Standar',
+        'premium': 'Premium'
+    };
+    return sizes[sizeKey] || sizeKey;
 }
 
 function handleQuantityChange(e) {
@@ -488,6 +509,7 @@ function showSuccessModal(orderData, total) {
                 <p><strong>Telepon:</strong> ${orderData.customer.phone}</p>
                 <p><strong>Total:</strong> Rp ${formatNumber(total)}</p>
                 <p><strong>Metode:</strong> ${orderData.delivery.method === 'delivery' ? 'Antar Jemput' : 'Ambil Sendiri'}</p>
+                <p><strong>Tanggal Penjemputan:</strong> ${new Date(orderData.delivery.date).toLocaleDateString('id-ID')}</p>
             </div>
             
             <div class="modal-actions">
@@ -565,7 +587,7 @@ function printReceipt(orderData, total) {
                     ${orderData.items.map(item => `
                         <tr>
                             <td>${item.name}</td>
-                            <td>${item.quantity} kg</td>
+                            <td>${item.quantity} ${item.unit || 'kg'}</td>
                             <td>Rp ${formatNumber(item.price)}</td>
                             <td>Rp ${formatNumber(item.price * item.quantity)}</td>
                         </tr>
@@ -574,8 +596,10 @@ function printReceipt(orderData, total) {
             </table>
             
             <div class="total">
-                <p>Total: Rp ${formatNumber(total)}</p>
-                <p>Status: MENUNGGU KONFIRMASI</p>
+                <p>Subtotal: Rp ${formatNumber(total - (orderData.delivery.method === 'delivery' ? 10000 : 0))}</p>
+                ${orderData.delivery.method === 'delivery' ? '<p>Biaya Pengiriman: Rp 10.000</p>' : ''}
+                <p><strong>Total: Rp ${formatNumber(total)}</strong></p>
+                <p><strong>Status: MENUNGGU KONFIRMASI</strong></p>
             </div>
             
             <div class="footer">
