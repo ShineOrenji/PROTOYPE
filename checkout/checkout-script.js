@@ -439,6 +439,17 @@ function handleOrderSubmission(e) {
         alert('Anda harus menyetujui Syarat & Ketentuan untuk melanjutkan.');
         return;
     }
+
+        document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("checkoutForm");
+    if (!form) return;
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault(); // STOP reload
+    handleOrderSubmission();
+  });
+});
+
     
     // Get form data
     const formData = new FormData(e.target);
@@ -483,6 +494,36 @@ function handleOrderSubmission(e) {
         
         // Show success modal
         showSuccessModal(orderData, total);
+
+        const nama = orderData.customer.name;
+        const noHp = orderData.customer.phone;
+        const alamat = orderData.customer.address || "-";
+        const catatan = orderData.customer.notes || "-";
+
+        const daftarLayanan = orderData.items
+        .map(item => item.name)
+        .join(', ');
+
+        const pesanWA =
+        `*Halo Mojang Laundry*%0A%0A` +
+        `Berikut data pemesanan saya:%0A%0A` +
+        `*Nama* : ${nama}%0A` +
+        `*No. HP* : ${noHp}%0A` +
+        `*Pesanan* : ${daftarLayanan}%0A` +
+        `*Total* : Rp${formatNumber(total)}%0A` +
+        `*Alamat* : ${alamat}%0A` +
+        `*Catatan* : ${catatan}%0A%0A` +
+        `Terima kasih`;
+
+
+    const nomorWA = "6287776498864";
+
+    setTimeout(() => {
+        window.open(
+            `https://wa.me/${nomorWA}?text=${pesanWA}`,
+            "_blank"
+        );
+    }, 500);
         
         // Reset button
         submitBtn.innerHTML = originalText;
